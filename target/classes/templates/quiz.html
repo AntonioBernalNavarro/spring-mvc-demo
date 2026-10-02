@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cuestionario</title>
+</head>
+<body>
+<h2>Cuestionario</h2>
+<p>Usuario: <span th:text="${username}"></span></p>
+
+<form th:action="@{/submitAnswers}" method="post">
+    <div th:each="q : ${questions}">
+        <p><strong th:text="${q.id} + '. ' + ${q.questionText}"></strong></p>
+        <div th:each="opt : ${q.options}">
+            <label>
+                <input type="radio"
+                       th:name="'answer_' + ${q.id}"
+                       th:value="${opt}"
+                       required/>
+                <span th:text="${opt}"></span>
+            </label>
+        </div>
+        <hr/>
+    </div>
+    <button type="submit">Enviar respuestas</button>
+</form>
+
+<p><a th:href="@{/logout}">Cerrar sesión</a></p>
+</body>
+</html>

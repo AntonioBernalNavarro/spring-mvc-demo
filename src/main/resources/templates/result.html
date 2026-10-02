@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Resultado</title>
+</head>
+<body>
+<h2>Resultado del cuestionario</h2>
+
+<p>Puntuación: <strong th:text="${score} + ' / ' + ${total}"></strong></p>
+
+<table border="1" cellpadding="6">
+    <thead>
+    <tr>
+        <th>Pregunta</th>
+        <th>Tu respuesta</th>
+        <th>Respuesta correcta</th>
+        <th>¿Correcta?</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="r : ${results}">
+        <td th:text="${r.questionText}"></td>
+        <td th:text="${r.userAnswer}"></td>
+        <td th:text="${r.correctAnswer}"></td>
+        <td th:text="${r.correct} ? '✔️' : '❌'"></td>
+    </tr>
+    </tbody>
+</table>
+
+<p><a th:href="@{/quiz}">Volver al cuestionario</a></p>
+<p><a th:href="@{/logout}">Cerrar sesión</a></p>
+</body>
+</html>
