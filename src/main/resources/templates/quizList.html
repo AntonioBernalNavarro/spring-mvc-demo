@@ -1,47 +1,72 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de cuestionarios</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-<h2>Gestión de preguntas (Admin)</h2>
 
-<p><a th:href="@{/addQuiz}">➕ Añadir nueva pregunta</a></p>
+<div class="container">
 
-<table border="1" cellpadding="6">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Pregunta</th>
-        <th>Opciones</th>
-        <th>Respuesta correcta</th>
-        <th>Acciones</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="q : ${questions}">
-        <td th:text="${q.id}"></td>
-        <td th:text="${q.questionText}"></td>
-        <td th:text="${q.options}"></td>
-        <td th:text="${q.correctAnswer}"></td>
-        <td>
-            <a th:href="@{/editQuiz/{id}(id=${q.id})}">✏️ Editar</a>
-            |
-            <a href="#" th:onclick="'deleteQuiz(' + ${q.id} + ')'">🗑️ Eliminar</a>
-        </td>
-    </tr>
-    </tbody>
-</table>
+    <div class="page-header">
+        <h1>Gestión de preguntas</h1>
+        <div class="actions">
+            <a th:href="@{/addQuiz}" class="btn btn--primary">➕ Añadir pregunta</a>
+            <a th:href="@{/logout}" class="btn btn--secondary">Cerrar sesión</a>
+        </div>
+    </div>
 
-<p><a th:href="@{/logout}">Cerrar sesión</a></p>
+    <div th:if="${#lists.isEmpty(questions)}" class="alert alert--error">
+        No hay preguntas registradas todavía.
+    </div>
 
-<script th:inline="javascript">
-    function deleteQuiz(id) {
+    <table th:unless="${#lists.isEmpty(questions)}">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Pregunta</th>
+            <th>Opciones</th>
+            <th>Respuesta correcta</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="q : ${questions}">
+            <td th:text="${q.id}"></td>
+            <td th:text="${q.questionText}"></td>
+            <td th:text="${q.options}"></td>
+            <td th:text="${q.correctAnswer}"></td>
+            <td>
+                <div class="actions">
+                    <a th:href="@{/editQuiz/{id}(id=${q.id})}"
+                       class="btn btn--secondary">✏️ Editar</a>
+                    <button type="button"
+                            class="btn btn--danger"
+                            th:attr="data-id=${q.id}"
+                            onclick="deleteQuiz(this)">🗑️ Eliminar</button>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+
+<script>
+    function deleteQuiz(button) {
+        const id = button.getAttribute('data-id');
         if (!confirm('¿Seguro que quieres eliminar esta pregunta?')) return;
+
         fetch('/deleteQuiz/' + id, { method: 'DELETE' })
-            .then(() => location.reload());
+            .then(response => {
+                if (response.ok) location.reload();
+                else alert('No se pudo eliminar la pregunta.');
+            })
+            .catch(() => alert('Error de red al eliminar la pregunta.'));
     }
 </script>
+
 </body>
 </html>

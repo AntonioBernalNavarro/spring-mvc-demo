@@ -1,32 +1,47 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Añadir pregunta</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-<h2>Añadir nueva pregunta</h2>
 
-<form th:action="@{/addQuiz}" th:object="${question}" method="post">
-    <div>
-        <label for="id">ID:</label>
-        <input type="number" id="id" th:field="*{id}" required/>
-    </div>
-    <div>
-        <label for="questionText">Pregunta:</label>
-        <input type="text" id="questionText" th:field="*{questionText}" required/>
-    </div>
-    <div>
-        <label>Opciones (una por línea):</label><br/>
-        <textarea id="options" name="optionsRaw" rows="4" required></textarea>
-    </div>
-    <div>
-        <label for="correctAnswer">Respuesta correcta:</label>
-        <input type="text" id="correctAnswer" th:field="*{correctAnswer}" required/>
-    </div>
-    <button type="submit">Guardar</button>
-</form>
+<div class="container container--narrow">
 
-<p><a th:href="@{/quizList}">← Volver a la lista</a></p>
+    <h1>Añadir nueva pregunta</h1>
+
+    <form th:action="@{/addQuiz}" th:object="${question}" method="post">
+
+        <div class="form-group">
+            <label for="id">ID</label>
+            <input type="number" id="id" th:field="*{id}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="questionText">Pregunta</label>
+            <input type="text" id="questionText" th:field="*{questionText}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="options">Opciones <small>(una por línea)</small></label>
+            <textarea id="options" name="optionsRaw" rows="4" required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="correctAnswer">Respuesta correcta</label>
+            <input type="text" id="correctAnswer" th:field="*{correctAnswer}" required>
+        </div>
+
+        <div class="actions">
+            <button type="submit" class="btn btn--primary">Guardar</button>
+            <a th:href="@{/quizList}" class="btn btn--secondary">Cancelar</a>
+        </div>
+
+    </form>
+
+</div>
+
 </body>
 </html>

@@ -1,0 +1,316 @@
+/* ============================================================
+   Spring MVC Demo – Quiz Application
+   ============================================================ */
+
+/* ---------- 1. Variables ---------- */
+:root {
+    --color-primary: #2563eb;
+    --color-primary-dark: #1d4ed8;
+    --color-primary-light: #dbeafe;
+
+    --color-danger: #dc2626;
+    --color-danger-dark: #b91c1c;
+
+    --color-success: #16a34a;
+    --color-success-light: #dcfce7;
+
+    --color-bg: #f8fafc;
+    --color-surface: #ffffff;
+    --color-border: #e2e8f0;
+    --color-text: #1e293b;
+    --color-text-muted: #64748b;
+
+    --radius: 10px;
+    --radius-sm: 6px;
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --transition: 0.2s ease;
+
+    --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+/* ---------- 2. Reset ---------- */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: var(--font-sans), serif;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 2rem 1rem;
+}
+
+/* ---------- 3. Contenedor ---------- */
+.container {
+    width: 100%;
+    max-width: 900px;
+    background: var(--color-surface);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-md);
+    padding: 2.5rem;
+}
+
+.container--narrow { max-width: 480px; }
+
+/* ---------- 4. Tipografía ---------- */
+h1, h2, h3 {
+    color: var(--color-text);
+    font-weight: 600;
+    margin-bottom: 1rem;
+    line-height: 1.3;
+}
+
+h1 { font-size: 1.8rem; }
+h2 { font-size: 1.4rem; }
+h3 { font-size: 1.15rem; }
+
+p { margin-bottom: 1rem; color: var(--color-text-muted); }
+
+a {
+    color: var(--color-primary);
+    text-decoration: none;
+    transition: color var(--transition);
+}
+
+a:hover { color: var(--color-primary-dark); text-decoration: underline; }
+
+small { color: var(--color-text-muted); font-weight: 400; }
+
+/* ---------- 5. Formularios ---------- */
+form { display: flex; flex-direction: column; gap: 1.1rem; }
+
+.form-group { display: flex; flex-direction: column; gap: 0.35rem; }
+
+label {
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: var(--color-text);
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="search"],
+textarea,
+select {
+    width: 100%;
+    padding: 0.65rem 0.85rem;
+    font-size: 0.95rem;
+    font-family: inherit;
+    color: var(--color-text);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-primary-light);
+}
+
+input[readonly] {
+    background: var(--color-bg);
+    color: var(--color-text-muted);
+    cursor: not-allowed;
+}
+
+textarea { min-height: 90px; resize: vertical; }
+
+/* ---------- 6. Botones ---------- */
+button,
+.btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.65rem 1.2rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    font-family: inherit;
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    text-decoration: none;
+    transition: background var(--transition), transform var(--transition);
+}
+
+.btn--primary,
+button[type="submit"] {
+    background: var(--color-primary);
+    color: #fff;
+}
+
+.btn--primary:hover,
+button[type="submit"]:hover {
+    background: var(--color-primary-dark);
+    color: #fff;
+    text-decoration: none;
+}
+
+.btn--danger { background: var(--color-danger); color: #fff; }
+.btn--danger:hover { background: var(--color-danger-dark); color: #fff; }
+
+.btn--secondary { background: var(--color-border); color: var(--color-text); }
+.btn--secondary:hover { background: #cbd5e1; color: var(--color-text); text-decoration: none; }
+
+button:active, .btn:active { transform: translateY(1px); }
+
+/* ---------- 7. Tablas ---------- */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    font-size: 0.95rem;
+}
+
+thead { background: var(--color-primary-light); }
+
+th, td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--color-border);
+}
+
+th { font-weight: 600; color: var(--color-text); }
+
+tbody tr:hover { background: var(--color-bg); }
+
+/* ---------- 8. Alertas ---------- */
+.alert {
+    padding: 0.85rem 1rem;
+    border-radius: var(--radius-sm);
+    margin-bottom: 1rem;
+    font-size: 0.92rem;
+}
+
+.alert--success {
+    background: var(--color-success-light);
+    color: var(--color-success);
+    border-left: 4px solid var(--color-success);
+}
+
+.alert--error {
+    background: #fee2e2;
+    color: var(--color-danger);
+    border-left: 4px solid var(--color-danger);
+}
+
+/* ---------- 9. Acciones ---------- */
+.actions {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.form-footer {
+    margin-top: 1.2rem;
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+}
+
+/* ---------- 10. Cabecera ---------- */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--color-border);
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.page-header h1 { margin: 0; }
+.page-header p { margin: 0.25rem 0 0; }
+
+/* ---------- 11. Preguntas ---------- */
+.question {
+    padding: 1.2rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    margin-bottom: 1rem;
+    background: var(--color-surface);
+}
+
+.question__text {
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: var(--color-text);
+}
+
+.question__options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.question__options label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 400;
+    cursor: pointer;
+    padding: 0.4rem 0.6rem;
+    border-radius: var(--radius-sm);
+    transition: background var(--transition);
+}
+
+.question__options label:hover { background: var(--color-bg); }
+
+/* ---------- 12. Filas de resultado ---------- */
+.row--correct { background: var(--color-success-light); }
+.row--correct:hover { background: #bbf7d0; }
+
+.row--incorrect { background: #fee2e2; }
+.row--incorrect:hover { background: #fecaca; }
+
+.cell-result { font-weight: 600; white-space: nowrap; }
+
+/* ---------- 13. Responsive ---------- */
+@media (max-width: 600px) {
+    body { padding: 1rem 0.75rem; }
+    .container { padding: 1.5rem; }
+    h1 { font-size: 1.5rem; }
+
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    /* Tablas → tarjetas */
+    table thead { display: none; }
+
+    table tr {
+        display: block;
+        margin-bottom: 1rem;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-sm);
+        padding: 0.5rem;
+    }
+
+    table td {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        border: none;
+        padding: 0.35rem 0.5rem;
+    }
+
+    table td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: var(--color-text-muted);
+    }
+
+    .question__options label { padding: 0.5rem; }
+}

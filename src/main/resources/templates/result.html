@@ -1,34 +1,56 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Resultado</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultado del cuestionario</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-<h2>Resultado del cuestionario</h2>
 
-<p>Puntuación: <strong th:text="${score} + ' / ' + ${total}"></strong></p>
+<div class="container">
 
-<table border="1" cellpadding="6">
-    <thead>
-    <tr>
-        <th>Pregunta</th>
-        <th>Tu respuesta</th>
-        <th>Respuesta correcta</th>
-        <th>¿Correcta?</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="r : ${results}">
-        <td th:text="${r.questionText}"></td>
-        <td th:text="${r.userAnswer}"></td>
-        <td th:text="${r.correctAnswer}"></td>
-        <td th:text="${r.correct} ? '✔️' : '❌'"></td>
-    </tr>
-    </tbody>
-</table>
+    <div class="page-header">
+        <div>
+            <h1>Resultado del cuestionario</h1>
+            <p>
+                Puntuación:
+                <strong th:text="${score} + ' / ' + ${total}">0 / 0</strong>
+            </p>
+        </div>
+        <div class="actions">
+            <a th:href="@{/quiz}" class="btn btn--secondary">🔁 Repetir</a>
+            <a th:href="@{/logout}" class="btn btn--secondary">Cerrar sesión</a>
+        </div>
+    </div>
 
-<p><a th:href="@{/quiz}">Volver al cuestionario</a></p>
-<p><a th:href="@{/logout}">Cerrar sesión</a></p>
+    <div th:if="${#lists.isEmpty(results)}" class="alert alert--error">
+        No hay resultados que mostrar.
+    </div>
+
+    <table th:unless="${#lists.isEmpty(results)}">
+        <thead>
+        <tr>
+            <th>Pregunta</th>
+            <th>Tu respuesta</th>
+            <th>Respuesta correcta</th>
+            <th>Resultado</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="r : ${results}"
+            th:classappend="${r.correct} ? 'row--correct' : 'row--incorrect'">
+
+            <td data-label="Pregunta" th:text="${r.questionText}">Pregunta</td>
+            <td data-label="Tu respuesta" th:text="${r.userAnswer} ?: '—'">—</td>
+            <td data-label="Correcta" th:text="${r.correctAnswer}">—</td>
+            <td data-label="Resultado" class="cell-result"
+                th:text="${r.correct} ? '✔️ Correcta' : '❌ Incorrecta'">—</td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+
 </body>
 </html>

@@ -1,44 +1,60 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar pregunta</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-<h2>Editar pregunta</h2>
 
-<form id="editForm">
-    <div>
-        <label for="id">ID:</label>
-        <input type="number" id="id" name="id" th:value="${question.id}" readonly/>
-    </div>
-    <div>
-        <label for="questionText">Pregunta:</label>
-        <input type="text" id="questionText" name="questionText" th:value="${question.questionText}" required/>
-    </div>
-    <div>
-        <label>Opciones (separadas por comas):</label><br/>
-        <textarea id="options" name="options" rows="4" required
-                  th:text="${#strings.listJoin(question.options, ',')}"></textarea>
-    </div>
-    <div>
-        <label for="correctAnswer">Respuesta correcta:</label>
-        <input type="text" id="correctAnswer" name="correctAnswer"
-               th:value="${question.correctAnswer}" required/>
-    </div>
-    <button type="button" onclick="updateQuiz()">Actualizar</button>
-</form>
+<div class="container container--narrow">
 
-<p><a th:href="@{/quizList}">← Volver a la lista</a></p>
+    <h1>Editar pregunta</h1>
 
-<script th:inline="javascript">
+    <form id="editForm">
+
+        <div class="form-group">
+            <label for="id">ID</label>
+            <input type="number" id="id" name="id"
+                   th:value="${question.id}" readonly>
+        </div>
+
+        <div class="form-group">
+            <label for="questionText">Pregunta</label>
+            <input type="text" id="questionText" name="questionText"
+                   th:value="${question.questionText}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="options">Opciones <small>(separadas por comas)</small></label>
+            <textarea id="options" name="options" rows="4" required
+                      th:text="${#strings.listJoin(question.options, ',')}"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="correctAnswer">Respuesta correcta</label>
+            <input type="text" id="correctAnswer" name="correctAnswer"
+                   th:value="${question.correctAnswer}" required>
+        </div>
+
+        <div class="actions">
+            <button type="button" class="btn btn--primary" onclick="updateQuiz()">Actualizar</button>
+            <a th:href="@{/quizList}" class="btn btn--secondary">Cancelar</a>
+        </div>
+
+    </form>
+
+</div>
+
+<script>
     function updateQuiz() {
-        const id = document.getElementById('id').value;
-        const questionText = document.getElementById('questionText').value;
-        const optionsRaw = document.getElementById('options').value;
-        const correctAnswer = document.getElementById('correctAnswer').value;
+        const id             = document.getElementById('id').value;
+        const questionText   = document.getElementById('questionText').value;
+        const optionsRaw     = document.getElementById('options').value;
+        const correctAnswer  = document.getElementById('correctAnswer').value;
 
-        const options = optionsRaw.split(',').map(s => s.trim());
+        const options = optionsRaw.split(',').map(s => s.trim()).filter(s => s.length > 0);
 
         const payload = {
             id: parseInt(id),
@@ -51,8 +67,14 @@
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
-        }).then(() => window.location.href = '/quizList');
+        })
+            .then(response => {
+                if (response.ok) window.location.href = '/quizList';
+                else alert('No se pudo actualizar la pregunta.');
+            })
+            .catch(() => alert('Error de red al actualizar la pregunta.'));
     }
 </script>
+
 </body>
 </html>

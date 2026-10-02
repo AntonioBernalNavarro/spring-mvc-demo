@@ -25,6 +25,7 @@
 - [Controller Endpoints](#-controller-endpoints)
 - [Building and Running](#-building-and-running-the-application)
 - [Usage](#-usage)
+- [User Interface](#-user-interface)
 - [Testing](#-testing)
 - [Limitations and Future Work](#-limitations-and-future-work)
 - [License](#-license)
@@ -59,6 +60,7 @@ The `spring-mvc-demo` project is a self‑contained Spring Boot application that
 | **Thymeleaf** | *(managed by Spring Boot)* | Server‑side template engine |
 | **Thymeleaf Extras Spring Security 6** | *(managed by Spring Boot)* | Integration between Thymeleaf and Spring Security |
 | **Maven** | via wrapper | Build and dependency management |
+| **Custom CSS** | — | Hand‑written stylesheet served at `/css/styles.css` |
 
 ### Key Dependencies
 
@@ -82,22 +84,27 @@ src/
 │   ├── java/org/example/springmvcdemo/
 │   │   ├── config/          # Security configuration
 │   │   ├── controller/      # MVC controllers
-│   │   ├── model/           # Domain entities
+│   │   ├── model/           # Domain entities (Question, User, QuizResult)
 │   │   ├── service/         # Business logic and user management
 │   │   └── SpringMvcDemoApplication.java
 │   └── resources/
+│       ├── static/
+│       │   └── css/
+│       │       └── styles.css   # Global stylesheet
 │       ├── templates/       # Thymeleaf view templates
 │       └── application.properties
 └── test/
     └── java/org/example/springmvcdemo/
 ```
 
-| Package | Responsibility |
-|---------|----------------|
-| `config` | Security setup |
-| `controller` | HTTP request handling |
-| `model` | `Question` and `User` entities |
-| `service` | Business logic and user‑detail loading |
+| Package / Folder | Responsibility |
+|------------------|----------------|
+| `config` | Security setup (`WebSecurityConfig`) |
+| `controller` | HTTP request handling (`QuizController`) |
+| `model` | `Question`, `User` and `QuizResult` entities |
+| `service` | Business logic and user-detail loading |
+| `resources/static/css` | Global stylesheet served at `/css/styles.css` |
+| `resources/templates` | Thymeleaf view templates |
 
 ---
 
@@ -105,7 +112,7 @@ src/
 
 The application adheres strictly to the **MVC** pattern:
 
-- **Model** — Represented by the `Question` and `User` classes, which encapsulate the data and domain logic.
+- **Model** — Represented by the `Question`, `User`, and `QuizResult` classes, which encapsulate the data and domain logic.
 - **View** — Implemented via Thymeleaf templates: `login.html`, `register.html`, `quiz.html`, `quizList.html`, `addQuiz.html`, `editQuiz.html`, `result.html`.
 - **Controller** — The `QuizController` class manages all incoming requests, coordinates the model and view, and delegates business operations to the service layer.
 
@@ -142,14 +149,15 @@ Password: admin123
 
 ## 🧩 Data Model
 
-Two domain classes constitute the data model:
+Three classes constitute the data model:
 
 | Class | Description |
 |-------|-------------|
 | **`Question`** | Represents a quiz question with an identifier, question text, a list of possible answers, and the correct answer. |
 | **`User`** | Represents an application user with username, email, password, and role. |
+| **`QuizResult`** | DTO that encapsulates the outcome of a single question: the question text, the user’s answer, the correct answer, and a boolean flag indicating whether the answer was correct. |
 
-Both classes provide standard constructors, getters, setters, and `toString()` methods. The `User.toString()` method explicitly omits the password field for security reasons.
+All classes provide standard constructors, getters, setters, and `toString()` methods. The `User.toString()` method explicitly omits the password field for security reasons.
 
 ---
 
@@ -228,6 +236,38 @@ http://localhost:8080
 
 The application defines **two roles**:
 
+### 👑 Administrator
+
+Log in with the pre‑configured credentials (`admin` / `admin123`). After authentication, the administrator is redirected to `/quizList`, where questions can be **added**, **edited**, or **deleted**.
+
+### 👤 Standard User
+
+A new user can self‑register via `/register` and is assigned the `USER` role by default. After logging in, the user is redirected to `/quiz`, where the available questions are presented. Upon submission, the user is shown a **result page** with the score and a breakdown of correct and incorrect answers.
+
+---
+
+## 🎨 User Interface
+
+The application uses a single, hand‑written stylesheet located at:
+
+```text
+src/main/resources/static/css/styles.css
+```
+
+It is referenced from every Thymeleaf template via:
+
+```html
+<link rel="stylesheet" th:href="@{/css/styles.css}">
+```
+
+Key features of the UI:
+
+- Centralised CSS custom properties (`:root`) for colors, radii, and transitions.
+- Responsive design with a `@media (max-width: 600px)` breakpoint that converts tables into stacked cards.
+- Reusable component classes: `.container`, `.page-header`, `.form-group`, `.btn`, `.alert`, `.question`, `.row--correct`, `.row--incorrect`.
+
+---
+
 ## 🧪 Testing
 
 The `src/test` directory contains the default Spring Boot test class generated by Spring Initializr. Additional unit and integration tests are **not included** in this demonstration.
@@ -270,12 +310,3 @@ The `spring-mvc-demo` repository provides a concise yet instructive example of a
 Made with ❤️ using Spring Boot
 
 </div>
-### 👑 Administrator
----
-
-Log in with the pre‑configured credentials (`admin` / `admin123`). After authentication, the administrator is redirected to `/quizList`, where questions can be **added**, **edited**, or **deleted**.
-
-
-
-A new user can self‑register via `/register` and is assigned the `USER` role by default. After logging in, the user is redirected to `/quiz`, where the available questions are presented. Upon submission, the user is shown a **result page** with the score and a breakdown of correct and incorrect answers.
-
